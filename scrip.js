@@ -3,8 +3,18 @@ const $=(i)=>document.getElementById(i),au=$('au'),regs=[{u:"d82c26e4cb069d8f5b9
 const clean=(s)=>s.replace(/[\u2018\u2019\u201c\u201d]/g,"'").replace(/[\u2013\u2014]/g,"-").trim();
 const bare=(s)=>clean(s).toLowerCase().replace(/[.।!?;:,|]/g,'');
 const tok=(t)=>{let r=[],re=/\S+/g,m;while((m=re.exec(t))!==null)r.push({t:m[0],s:m.index,e:re.lastIndex});return r};
+
 function upWC(){const t=$('tx').value.trim(),l=$('lg').value;let w=0;if(t){if(l==='s')w=t.replace(/\s/g,'').length/5;else if(l==='p'){const tk=t.split(/\s+/);let sm=0,lg=0;tk.forEach(x=>{if(x.match(/[,;]/))sm++;if(x.match(/[.?!|\u0964]/))lg++});w=tk.length+(sm*0.5)+(lg*1)}else w=t.split(/\s+/).length}$('wc').value=Math.ceil(w);$('st').textContent='W: '+Math.ceil(w)}
-function init(){regs.forEach(r=>{let o=document.createElement('option');o.value=r.u;o.textContent=r.t;$('rg').appendChild(o)});[40,50,60,80,90,100,120,140,160,180,200].forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;$('ws').appendChild(o)});[0.8,1,1.2,1.5].forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;$('rs').appendChild(o)});$('rg').onchange=e=>lG(e.target.value);$('f').onchange=e=>Array.from(e.target.files).forEach(f=>f.type.includes('audio')?(au.src=URL.createObjectURL(f),meta(f.name)):(r=new FileReader(),r.onload=v=>{$('tx').value=v.target.result;upWC()},r.readAsText(f)));lG(null)}
+
+function init(){
+    regs.forEach(r=>{let o=document.createElement('option');o.value=r.u;o.textContent=r.t;$('rg').appendChild(o)});
+    [40,50,60,80,90,100,120,140,160,180,200].forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;$('ws').appendChild(o)});
+    [0.8,1,1.2,1.5].forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;$('rs').appendChild(o)});
+    $('rg').onchange=e=>lG(e.target.value);
+    $('f').onchange=e=>Array.from(e.target.files).forEach(f=>f.type.includes('audio')?(au.src=URL.createObjectURL(f),meta(f.name)):(r=new FileReader(),r.onload=v=>{$('tx').value=v.target.result;upWC()},r.readAsText(f)));
+    lG(null);
+}
+
 function setP(v){const[min,max]=v.split('-');uSl('min',min);uSl('max',max==='max'?maxW:max)}
 function uSl(t,v){let val=parseInt(v)||0;if(t==='min'){$('wMin').value=val;$('slMi').value=val}else{$('wMax').value=val;$('slMa').value=val}renL()}
 function adj(k,v){if(k==='sc'){curS=Math.max(0.5,Math.min(1.5,curS+v));document.documentElement.style.setProperty('--sc',curS)}else{curT=Math.max(10,Math.min(48,curT+v));document.documentElement.style.setProperty('--ts',curT+'px')}}
@@ -15,6 +25,7 @@ function gW(i){const l=$('lg').value;if(i.w){if(l==='s')return i.w[0];if(l==='sp
 function renT(){const t=$('tags'),set=new Set();curL.forEach(i=>i.tags.forEach(g=>set.add(g)));t.innerHTML='';Array.from(set).sort().forEach(g=>{let s=document.createElement('span');s.className='filter-chip';s.textContent=g;s.onclick=()=>{s.classList.toggle('active');renL()};t.appendChild(s)})}
 function renL(){const mi=parseInt($('wMin').value)||0,ma=parseInt($('wMax').value)||maxW,at=Array.from(document.querySelectorAll('.filter-chip.active')).map(x=>x.textContent),so=$('srt').value;filtL=curL.filter(i=>{const v=gW(i);return(v>=mi&&v<=ma)&&(at.length===0||at.every(t=>i.tags.includes(t)))});if(so==='on')filtL.sort((a,b)=>a._id-b._id);if(so==='no')filtL.sort((a,b)=>b._id-a._id);if(so==='az')filtL.sort((a,b)=>a.title.localeCompare(b.title));if(so==='sl')filtL.sort((a,b)=>gW(a)-gW(b));if(so==='ls')filtL.sort((a,b)=>gW(b)-gW(a));if(so==='sh'){for(let i=filtL.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[filtL[i],filtL[j]]=[filtL[j],filtL[i]]}}$('ls').innerHTML='';filtL.forEach((i,idx)=>{let d=document.createElement('div');d.className='list-item';d.innerHTML=`<div style="font-weight:500">${i.title}</div><div style="font-size:9px;color:#888">${gW(i)} words • ${fT(i.dur||0)}</div>`;d.onclick=()=>lA(i,idx);$('ls').appendChild(d)})}
 async function lA(i,idx){curI=idx;curO=i;openM();$('tx').value="Loading...";const v=gW(i);if(v){$('wc').value=v;$('st').textContent='W: '+v;if(i.dur){$('wi').value=(v/(i.dur/60)).toString();$('ri').value="1.0000";sync('r')}}const id=i.url?.split('details/')[1],dl=`https://archive.org/download/${id}/`;let auSrc=i.audio;try{if(id){const mr=await fetch(`https://archive.org/metadata/${id}`),md=await mr.json(),fs=md.files||[];const mf=fs.find(f=>f.name.endsWith('.mp3')),of=fs.find(f=>f.name.match(/\.(wav|m4a|ogg|aac)$/i)),tf=fs.find(f=>f.name.endsWith('.txt')||f.name.endsWith('.md'));if(mf)auSrc=dl+mf.name;else if(of)auSrc=dl+of.name;if(i.matter){const r=await fetch(i.matter);$('tx').value=await r.text()}else if(tf){const r=await fetch(dl+tf.name);$('tx').value=await r.text()}else{$('tx').value=md.metadata.description?.replace(/<[^>]*>?/gm,'')||"No text"}}}catch(e){if(!i.matter)$('tx').value="Text Load Fail"}au.src=auSrc;au.load();upWC()}
+
 function sync(s){const w=parseFloat($('wc').value),m=au.duration/60;if(!m||!w)return;if(s==='w'){$('ri').value=(parseFloat($('wi').value)/(w/m)).toFixed(4);au.playbackRate=Math.max(0.1,parseFloat($('ri').value))}else{const wpm=((w/m)*parseFloat($('ri').value));$('wi').value=(wpm%1===0)?wpm.toString():wpm.toFixed(2);au.playbackRate=Math.max(0.1,parseFloat($('ri').value))}const ws=$('ws'),wv=$('wi').value;ws.value=[...ws.options].some(o=>o.value===wv)?wv:""}
 function dS(k,v){if(!v)return;if(k==='w')$('wi').value=v;else $('ri').value=v}
 function adW(d){$('wi').value=(Math.round(parseFloat($('wi').value||0))+d).toString();sync('w')}
