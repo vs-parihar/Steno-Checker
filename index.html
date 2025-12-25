@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Steno Player</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+    <div class="card">
+        <div class="row">
+            <button onclick="$('f').click()" style="flex:1">📁 Open</button>
+            <button onclick="openM()" id="libBtn" style="flex:1">🌐 Library</button>
+            <button onclick="expA()" id="exB" style="width:32px">⬇️</button>
+        </div>
+        <input type="file" id="f" hidden multiple>
+        <div class="row">
+            <div style="width:50px">
+                <label class="lbl">Words</label>
+                <input type="number" id="wc" value="0" style="width:100%">
+            </div>
+            <div style="width:70px">
+                <label class="lbl">Logic</label>
+                <select id="lg" style="width:100%" onchange="upWC();renL()">
+                    <option value="p" selected>Punc</option>
+                    <option value="s">Std</option>
+                    <option value="sp">Space</option>
+                </select>
+            </div>
+            <div style="flex:1">
+                <div class="row" style="margin:0;justify-content:space-between">
+                    <label class="lbl">Vol</label>
+                    <div style="display:flex;gap:2px">
+                        <button class="xs-btn" onclick="adj('ts',-1)">T-</button>
+                        <button class="xs-btn" onclick="adj('ts',1)">T+</button>
+                        <button class="xs-btn" onclick="adj('sc',-0.05)">S-</button>
+                        <button class="xs-btn" onclick="adj('sc',0.05)">S+</button>
+                    </div>
+                </div>
+                <div class="row" style="margin:0;align-items:center">
+                    <button class="sm-btn" onclick="$('vl').value=1;upV()">R</button>
+                    <input type="range" id="vl" min="0" max="2" step="0.1" value="1" style="flex:1;height:24px" oninput="upV()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <textarea id="tx" class="card" placeholder="Content..." oninput="upWC()"></textarea>
+    <div class="card" style="margin-top:auto">
+        <div class="row" style="justify-content:space-between;align-items:center">
+            <div style="display:flex;gap:8px;align-items:center">
+                <label class="chk-row" style="display:flex;align-items:center;gap:2px;font-size:11px"><input type="checkbox" id="as" checked>Scroll</label>
+                <label class="chk-row" style="display:flex;align-items:center;gap:2px;font-size:11px"><input type="checkbox" id="bp" checked>Beep</label>
+                <button onclick="opTr()" style="height:20px;font-size:9px;padding:0 4px;border-color:var(--sky)">Transcribe</button>
+            </div>
+            <span id="st" style="font-size:11px">W: 0</span>
+        </div>
+        <audio id="au" crossorigin="anonymous" preload="auto" style="display:none"></audio>
+        <div class="row" style="align-items:center">
+            <button id="pl"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <button id="sb"><svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg></button>
+            <div class="p-box" id="pb"><div class="p-fill" id="pf"></div></div>
+            <span id="tm" style="font-family:monospace;margin-left:2px;white-space:nowrap;font-size:11px">0:00/0:00</span>
+        </div>
+        <div class="row">
+            <button onclick="stepTrk(-1)" style="flex:1">⏮</button>
+            <button onclick="sk(-10)" style="flex:1;color:#ca8a04;border-color:rgba(202,138,4,0.5)">-10</button>
+            <button onclick="sk(-5)" style="flex:1;color:#fde047;border-color:rgba(253,224,71,0.5)">-5</button>
+            <button onclick="sk(5)" style="flex:1;color:#f87171;border-color:rgba(248,113,113,0.5)">+5</button>
+            <button onclick="sk(10)" style="flex:1;color:#991b1b;border-color:rgba(153,27,27,0.5)">+10</button>
+            <button onclick="stepTrk(1)" style="flex:1">⏭</button>
+        </div>
+        <div class="row" style="align-items:center">
+            <div style="flex:1">
+                <label class="lbl">WPM</label>
+                <div class="row" style="margin:0">
+                    <button class="sm-btn" onclick="adW(-1)">-</button>
+                    <input type="text" id="wi" style="width:60px;height:28px">
+                    <select id="ws" class="drop-thin" onchange="dS('w',this.value);sync('w')"><option value="">▼</option></select>
+                    <button class="sm-btn" onclick="adW(1)">+</button>
+                </div>
+            </div>
+            <div style="flex:1;text-align:right">
+                <label class="lbl">Rate</label>
+                <div class="row" style="margin:0;justify-content:flex-end">
+                    <button class="sm-btn" onclick="adR(-0.0001)">-</button>
+                    <input type="number" id="ri" value="1.0000" style="width:60px;height:28px">
+                    <select id="rs" class="drop-thin" onchange="dS('r',this.value);sync('r')"><option value="">▼</option></select>
+                    <button class="sm-btn" onclick="adR(0.0001)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="md" class="modal">
+    <div class="row">
+        <select id="rg" style="flex:1"><option value="">All Playlists</option></select>
+        <select id="srt" style="width:80px" onchange="renL()"><option value="on">O-N</option><option value="no">N-O</option><option value="az">A-Z</option><option value="sl">Short</option><option value="ls">Long</option><option value="sh">Shuffle</option></select>
+        <button onclick="openM()" class="cls-btn">✕</button>
+    </div>
+    <div class="range-wrap">
+        <select id="preW" onchange="setP(this.value)" style="height:24px;font-size:10px"><option value="0-max">Any</option><option value="0-200">0-200</option><option value="200-500">200-500</option></select>
+        <input type="number" id="wMin" value="0" style="width:35px;height:24px;font-size:10px" oninput="uSl('min',this.value)">
+        <div class="sl-con"><input type="range" id="slMi" min="0" max="1" value="0" oninput="uSl('min',this.value)"><input type="range" id="slMa" min="0" max="1" value="1" oninput="uSl('max',this.value)"></div>
+        <input type="number" id="wMax" value="0" style="width:45px;height:24px;font-size:10px" oninput="uSl('max',this.value)">
+    </div>
+    <div id="tags" style="overflow-x:auto;white-space:nowrap;padding:1px 0"></div>
+    <div id="ls" style="overflow-y:auto;flex:1;padding-top:2px;border-top:1px solid #333"></div>
+</div>
+
+<div id="trM" class="modal">
+    <div class="row" style="background:#111;padding:2px;border-bottom:1px solid var(--bd)">
+        <div style="flex:1.5"><label class="lbl">Limit</label><div class="row" style="margin:0"><select id="trT" style="height:28px;width:50px" onchange="$('trC').value=this.value"><option value="0">∞</option><option value="5">5</option><option value="10">10</option><option value="20">20</option></select><input type="number" id="trC" value="0" style="height:28px;width:40px;font-size:11px" oninput="$('trT').value='0'"></div></div>
+        <div style="flex:1;text-align:center"><div class="lbl">Time</div><div id="trCD" style="font-size:16px;font-weight:bold;color:#22c55e">00:00</div></div>
+        <button id="trS" onclick="stTr()" style="flex:1.5;border-color:var(--gr)">Start</button>
+        <button onclick="clTr()" class="cls-btn">✕</button>
+    </div>
+    <div id="trV" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+        <textarea id="trI" placeholder="Type here..." disabled onpaste="return false" style="margin:0;border:none"></textarea>
+        <div class="row" style="background:#111;padding:2px;border-top:1px solid var(--bd)"><div id="trInf" style="flex:1;font-size:11px;display:flex;align-items:center">Ready</div><button onclick="subTr()" style="width:80px;border-color:var(--bd);height:28px">Submit</button></div>
+    </div>
+    <div id="rsV" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+        <div class="row" style="padding:2px 4px;background:#1a1a1a;align-items:center;border-bottom:1px solid #333;flex-shrink:0"><input type="number" id="mxM" value="100" oninput="reCalc()" style="width:45px;height:24px"><select id="dblE" onchange="reCalc()" style="height:24px;flex:1"><option value="0">1x Err</option><option value="1">2x Err</option></select><div style="flex:2;text-align:right;font-size:11px" id="resSc"></div></div>
+        <div style="display:flex;height:150px;border-bottom:1px solid #333;gap:2px;padding:2px"><textarea id="rS" readonly style="font-size:11px;line-height:1.2;margin:0;flex:1;width:0;height:100%"></textarea><div id="checkV"></div></div>
+        <div id="eL" style="flex:1;overflow-y:auto;padding:2px"></div>
+        <div class="row" style="padding:2px"><button onclick="refine()" style="flex:1;border-color:var(--bd);height:28px">Refine / Edit</button></div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
