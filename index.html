@@ -94,11 +94,7 @@
 </div>
 
 <div id="md" class="modal">
-    <div class="row">
-        <select id="rg" style="flex:1"><option value="">All Playlists</option></select>
-        <select id="srt" style="width:80px" onchange="renL()"><option value="on">O-N</option><option value="no">N-O</option><option value="az">A-Z</option><option value="sl">Short</option><option value="ls">Long</option><option value="sh">Shuffle</option></select>
-        <button onclick="openM()" class="cls-btn">✕</button>
-    </div>
+    <div class="row"><select id="rg" style="flex:1"><option value="">All Playlists</option></select><select id="srt" style="width:80px" onchange="renL()"><option value="on">O-N</option><option value="no">N-O</option><option value="az">A-Z</option><option value="sl">Short</option><option value="ls">Long</option><option value="sh">Shuffle</option></select><button onclick="openM()" class="cls-btn">✕</button></div>
     <div class="range-wrap">
         <select id="preW" onchange="setP(this.value)" style="height:24px;font-size:10px"><option value="0-max">Any</option><option value="0-200">0-200</option><option value="200-500">200-500</option></select>
         <input type="number" id="wMin" value="0" style="width:35px;height:24px;font-size:10px" oninput="uSl('min',this.value)">
@@ -113,8 +109,7 @@
     <div class="row" style="background:#111;padding:2px;border-bottom:1px solid var(--bd)">
         <div style="flex:1.5"><label class="lbl">Limit</label><div class="row" style="margin:0"><select id="trT" style="height:28px;width:50px" onchange="$('trC').value=this.value"><option value="0">∞</option><option value="5">5</option><option value="10">10</option><option value="20">20</option></select><input type="number" id="trC" value="0" style="height:28px;width:40px;font-size:11px" oninput="$('trT').value='0'"></div></div>
         <div style="flex:1;text-align:center"><div class="lbl">Time</div><div id="trCD" style="font-size:16px;font-weight:bold;color:#22c55e">00:00</div></div>
-        <button id="trS" onclick="stTr()" style="flex:1.5;border-color:var(--gr)">Start</button>
-        <button onclick="clTr()" class="cls-btn">✕</button>
+        <button id="trS" onclick="stTr()" style="flex:1.5;border-color:var(--gr)">Start</button><button onclick="clTr()" class="cls-btn">✕</button>
     </div>
     <div id="trV" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
         <textarea id="trI" placeholder="Type here..." disabled onpaste="return false" style="margin:0;border:none"></textarea>
@@ -127,6 +122,7 @@
         <div class="row" style="padding:2px"><button onclick="refine()" style="flex:1;border-color:var(--bd);height:28px">Refine / Edit</button></div>
     </div>
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
