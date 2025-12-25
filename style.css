@@ -1,15 +1,16 @@
 :root{--in:#6366f1;--bg:#000;--fg:#e2e8f0;--bd:rgba(99,102,241,0.5);--re:rgba(239,68,68,0.5);--gr:rgba(34,197,94,0.5);--ye:rgba(234,179,8,0.5);--sky:rgba(14,165,233,0.5);--sc:1;--ts:14px}
-body{background:var(--bg);color:var(--fg);font-family:system-ui;margin:0;padding:2px;height:100dvh;box-sizing:border-box;overflow:hidden;font-size:calc(12px * var(--sc))}
-#app{display:flex;flex-direction:column;height:100%;zoom:var(--sc)}
+body{background:#000;color:var(--fg);font-family:system-ui;margin:0;padding:0;height:100dvh;box-sizing:border-box;overflow:hidden;font-size:calc(12px * var(--sc));display:flex;justify-content:center}
+#app{display:flex;flex-direction:column;height:100%;zoom:var(--sc);width:100%;max-width:650px;background:#000;box-shadow:0 0 20px rgba(255,255,255,0.05);position:relative}
 .card{border:1px solid var(--bd);padding:4px;margin-bottom:2px;background:#0a0a0a;flex-shrink:0}
-.row{display:flex;gap:2px;align-items:flex-end;margin-bottom:2px}
+.row{display:flex;gap:4px;align-items:flex-end;margin-bottom:2px}
 input,select,button,textarea{background:#111;color:#fff;border:1px solid var(--bd);padding:2px 4px;border-radius:0;font-size:inherit;outline:none;height:32px;box-sizing:border-box}
 button{cursor:pointer;background:#1e1e1e;display:flex;align-items:center;justify-content:center;min-width:32px}
 textarea{width:100%;flex:1;min-height:80px;height:100%;font-size:var(--ts);resize:none;padding:4px;overflow-y:auto;border-color:var(--bd)}
 .lbl{font-size:8px;color:#94a3b8;display:block;text-transform:uppercase;margin-bottom:1px}
 .p-box{flex:1;height:12px;background:#1e293b;cursor:pointer;position:relative;border:1px solid var(--in)}
 .p-fill{height:100%;background:var(--in);width:0%}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.98);display:none;flex-direction:column;padding:4px;z-index:99}.modal.active{display:flex}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;justify-content:center;z-index:99;padding:4px}.modal.active{display:flex}
+.modal-inner{width:100%;max-width:650px;height:100%;display:flex;flex-direction:column;box-sizing:border-box;zoom:var(--sc)}
 .list-item{padding:6px;border:1px solid var(--bd);background:#111;margin-bottom:2px;font-size:12px;cursor:pointer}
 .sm-btn{height:28px;width:28px;padding:0;font-size:12px}
 .xs-btn{height:18px;width:22px;min-width:22px;font-size:9px;padding:0;border-color:var(--bd);display:inline-flex}
@@ -23,6 +24,11 @@ svg{width:18px;height:18px;fill:currentColor}
 .sl-con input::-webkit-slider-thumb{height:14px;width:14px;border-radius:50%;background:var(--in);cursor:pointer;pointer-events:auto;-webkit-appearance:none;border:1px solid #fff}
 .m-err{color:#ef4444;text-decoration:line-through;margin:0 1px}.m-mis{color:#eab308;border-bottom:1px dashed #eab308;margin:0 1px}.m-h{color:#6366f1;margin:0 1px}.m-d{border:1px solid #ef4444;color:#ef4444;padding:0 1px}
 .e-it{background:#111;padding:3px;margin-bottom:2px;border:1px solid #333;font-size:11px}
+.e-it.active{border-color:var(--in);background:#1e1b4b}
 .e-ctx{background:var(--bd);color:#fff;border-radius:2px;padding:0 3px;margin:0 1px}.e-w{font-weight:bold;margin:0 2px;cursor:pointer}
-#checkV{background:#111;border:1px solid var(--bd);overflow-y:auto;padding:4px;font-size:12px;line-height:1.4;white-space:pre-wrap;flex:1;width:0;height:100%}
-.c-ins{color:#ef4444;font-weight:bold}.c-mis{color:#eab308;font-weight:bold}.c-sp{color:#6366f1;font-weight:bold}.c-dbl{color:#ef4444;border-bottom:1px solid #ef4444}
+.res-view{background:#111;border:1px solid var(--bd);overflow-y:auto;padding:4px;font-size:12px;line-height:1.6;white-space:pre-wrap;flex:1;width:0;height:100%;font-family:system-ui}
+.c-ins{color:#ef4444;font-weight:bold;cursor:pointer}.c-mis{color:#eab308;font-weight:bold;cursor:pointer}.c-sp{color:#6366f1;font-weight:bold;cursor:pointer}.c-dbl{color:#ef4444;border-bottom:1px solid #ef4444;cursor:pointer}
+.w-n{cursor:pointer;color:#94a3b8}
+.ctx-hl{background:rgba(99,102,241,0.5);border-radius:2px;color:#fff}
+.sep{width:1px;background:#333;height:24px;margin:0 4px}
+@media (max-width: 600px) { #app, .modal-inner { max-width: 100%; width: 100%; } body { padding: 0; } }
