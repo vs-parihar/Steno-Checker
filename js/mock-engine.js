@@ -1,0 +1,30 @@
+let tmr, tS, tLim = 0, tEl = 0, started = 0;
+
+function stTmr() {
+    if (started) return;
+    started = 1;
+    $('tmD').disabled = true;
+    $('tmC').disabled = true;
+    tS = Date.now();
+    tmr = setInterval(() => {
+        tEl = Math.floor((Date.now() - tS) / 1000);
+        let r = tLim ? tLim * 60 - tEl : tEl;
+        if (tLim && r <= 0) { clearInterval(tmr); check(); return; }
+        let m = Math.floor(r / 60), s = r % 60;
+        const elP = tLim ? ((tLim * 60 - r) / (tLim * 60)) * 100 : 0;
+        const cl = elP > 95 ? 'tm-re' : (elP > 75 ? 'tm-or' : (elP > 50 ? 'tm-ye' : 'tm-gr'));
+        $('tmR').className = cl;
+        $('tmR').textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+    }, 1000);
+}
+
+function sTm(v) {
+    if (v == '-1') { $('tmC').style.display = 'block'; $('tmD').style.display = 'none'; $('tmC').focus(); }
+    else {
+        tLim = parseInt(v);
+        $('tmR').textContent = tLim ? tLim + ":00" : "00:00";
+        if (tmr) { clearInterval(tmr); tmr = null; started = 0; }
+        $('tmR').className = 'tm-gr'; tEl = 0;
+        if (v == '-1') tLim = parseInt($('tmC').value);
+    }
+}

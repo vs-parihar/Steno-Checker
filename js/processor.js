@@ -1,0 +1,5 @@
+const nz = s => s.replace(/[\u0902\u0901]/g, 'ŋ').replace(/[\u092e\u0928]\u094d/g, 'ŋ').replace(/\u090f/g, '\u092f\u0947').replace(/\u0907/g, '\u092f\u093f').replace(/\u093e\u090f/g, '\u093e\u092f\u0947').replace(/\u093e\u0907/g, '\u093e\u092f\u093f');
+const splitT = t => t.replace(/([।?.,!@#;()"'\[\]{}-])/g, ' $1 ').split(/\s+/).filter(x => x).map(v => ({ v, t: v.match(/[।?.,!@#;()"'\[\]{}-]/) ? 'p' : 'w' }));
+const lv = (a, b) => { let d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = a[i - 1] === b[j - 1] ? d[i - 1][j - 1] : Math.min(d[i - 1][j], d[i][j - 1], d[i - 1][j - 1]) + 1; return d[a.length][b.length]; };
+const eq = (a, b) => nz(a) === nz(b);
+const isPl = (s, t) => { let a = s.replace(/[ोंोां]$/, ''), b = t.replace(/[ोंोां]$/, ''); return (a === b || nz(a) === nz(b)) && s !== t; };
