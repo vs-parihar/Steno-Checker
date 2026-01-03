@@ -1,9 +1,6 @@
 let ac, sr, gn, is = 0, bpAb = null;
 
-function updatePlBtn() {
-    $('pl').innerHTML = is ? '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-    if (is) $('pl').classList.add('pausing'); else $('pl').classList.remove('pausing');
-}
+function upV() { if (gn) gn.gain.value = $('vl').value }
 
 $('pl').onclick = async () => {
     if ($('pl').disabled) return;
@@ -13,23 +10,23 @@ $('pl').onclick = async () => {
         gn = ac.createGain();
         sr.connect(gn);
         gn.connect(ac.destination);
-        upV();
+        upV()
     }
     if (is) {
         au.pause();
-        is = 0;
+        is = 0
     } else {
         if ($('bp').checked && au.currentTime < 0.5) {
             $('pl').disabled = true;
             bpAb = new AbortController();
-            try { await beeps(bpAb.signal); } catch (e) { $('pl').disabled = false; return; }
-            $('pl').disabled = false;
+            try { await beeps(bpAb.signal) } catch (e) { $('pl').disabled = false; return }
+            $('pl').disabled = false
         }
         await ac.resume();
         au.play();
-        is = 1;
+        is = 1
     }
-    updatePlBtn();
+    updatePlBtn()
 };
 
 $('sb').onclick = async () => {
@@ -38,7 +35,7 @@ $('sb').onclick = async () => {
     au.currentTime = 0;
     is = 0;
     updatePlBtn();
-    $('pl').disabled = false;
+    $('pl').disabled = false
 };
 
 async function beeps(s) {
@@ -51,13 +48,27 @@ async function beeps(s) {
         o.frequency.value = i === 4 ? 1200 : 880;
         o.start();
         o.stop(ac.currentTime + (i === 4 ? 0.5 : 0.1));
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise(r => setTimeout(r, 1000))
     }
 }
 
-function sk(s) { au.currentTime += s; }
+function sk(s) { au.currentTime += s }
 
-function upV() { if (gn) gn.gain.value = $('vl').value; }
+au.ontimeupdate = () => {
+    if (!au.duration) return;
+    const d = au.duration, c = au.currentTime, p = (c / d) * 100, w = parseFloat($('wi').value) || 150, relP = Math.min(100, Math.max(0, c - ((20 / w) * 60)) / (d - ((40 / w) * 60)) * 100);
+    $('pf').style.width = p + '%';
+    $('tm').textContent = `${fT(c / au.playbackRate)}/${fT(d / au.playbackRate)}`;
+    if ($('as').checked) {
+        const m = $('tx').scrollHeight - $('tx').clientHeight;
+        $('tx').scrollTop = (relP / 100) * m
+    }
+};
+
+$('pb').onclick = e => {
+    const r = $('pb').getBoundingClientRect();
+    au.currentTime = ((e.clientX - r.left) / r.width) * au.duration
+};
 
 async function expA() {
     const b = $('exB'), r = parseFloat($('ri').value);
@@ -72,14 +83,14 @@ async function expA() {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = name + '.wav';
-        a.click();
-    } catch (e) { } finally { b.innerText = '⬇️'; }
+        a.click()
+    } catch (e) { } finally { b.innerText = '⬇️' }
 }
 
 function toWav(b) {
     let n = b.numberOfChannels, len = b.length * n * 2 + 44, buf = new ArrayBuffer(len), v = new DataView(buf), pos = 44;
-    const s = (st, s) => { for (let i = 0; i < s.length; i++) v.setUint8(st + i, s.charCodeAt(i)); };
+    const s = (st, s) => { for (let i = 0; i < s.length; i++) v.setUint8(st + i, s.charCodeAt(i)) };
     s(0, 'RIFF'); v.setUint32(4, len - 8, true); s(8, 'WAVE'); s(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, n, true); v.setUint32(24, b.sampleRate, true); v.setUint32(28, b.sampleRate * n * 2, true); v.setUint16(32, n * 2, true); v.setUint16(34, 16, true); s(36, 'data'); v.setUint32(40, len - 44, true);
-    for (let i = 0; i < b.length; i++) for (let c = 0; c < n; c++) { let x = Math.max(-1, Math.min(1, b.getChannelData(c)[i])); v.setInt16(pos, x < 0 ? x * 0x8000 : x * 0x7FFF, true); pos += 2; }
-    return buf;
+    for (let i = 0; i < b.length; i++)for (let c = 0; c < n; c++) { let x = Math.max(-1, Math.min(1, b.getChannelData(c)[i])); v.setInt16(pos, x < 0 ? x * 0x8000 : x * 0x7FFF, true); pos += 2 }
+    return buf
 }
