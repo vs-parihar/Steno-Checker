@@ -1,4 +1,4 @@
-const regs = [
-    { u: "d82c26e4cb069d8f5b9d1f2a5cf42e24", t: "Eng" },
-    { u: "363e6ce7f8e1b41be69bba7623c7c320", t: "Hin" }
-];
+function svSt(){const s={tx:$('tx').value,vl:$('vl').value,wi:$('wi').value,ri:$('ri').value,wcM:$('wcM').value,as:$('as').checked,bp:$('bp').checked,tm:document.body.classList.contains('light-mode'),curI};localStorage.setItem('st',JSON.stringify(s))}
+function ldSt(){try{const s=JSON.parse(localStorage.getItem('st')),h=JSON.parse(localStorage.getItem('hist'));if(h)hist=h;if(s){$('tx').value=s.tx||'';$('vl').value=s.vl||1;$('wi').value=s.wi||'80';$('ri').value=s.ri||'1.0000';$('wcM').value=s.wcM||'0';$('as').checked=!!s.as;$('bp').checked=!!s.bp;curI=s.curI??-1;if(s.tm)document.body.classList.add('light-mode');document.querySelectorAll('.th-chk').forEach(x=>x.checked=!!s.tm)}}catch(e){}}
+function upWC(f=false){const t=$('tx').value.trim(),m=$('wcM').value;let w=0;if(m==0)w=t?t.split(/\s+/).length:0;else if(m==1)w=Math.ceil(t.length/5);else{const p=t.replace(/([।?.,!@#;()"'\[\]{}-])/g,' $1 ').split(/\s+/).filter(x=>x);p.forEach(x=>{if(x.match(/^[,\u0964;]$/))w+=0.5;else if(x.match(/^[.?!।!]$/))w+=1;else if(!x.match(/^[।?.,!@#;()"'\[\]{}-]$/))w+=1})}$('wc').value=w;updateStatus()}
+function updateStatus(){$('stWPM').textContent=($('wi').value||0)+' WPM';$('stRate').textContent=($('ri').value||1.0)+'x';$('stWC').textContent=($('wc').value||0)+' W'}
