@@ -17,9 +17,7 @@
                 <button onclick="$('exM').classList.add('active')" style="padding:0 8px;border-color:var(--ye)">📝 Exam</button>
             </div>
             <div style="flex:1"></div>
-            <div style="display:flex;gap:2px">
-                <button onclick="expA()" id="exB" style="width:24px">⬇️</button>
-            </div>
+            <div style="display:flex;gap:2px"><button onclick="expA()" id="exB" style="width:24px">⬇️</button></div>
         </div>
         <input type="file" id="f" hidden multiple>
         <div class="row" style="align-items:flex-end">
@@ -27,7 +25,7 @@
                 <label class="lbl">Words</label>
                 <div style="display:flex">
                     <input type="number" id="wc" value="0" style="width:100%" readonly>
-                    <select id="wcM" onchange="upWC()" style="width:15px;padding:0">
+                    <select id="wcM" onchange="upWC();renL();svSt()" style="width:15px;padding:0">
                         <option value="0">Sp</option>
                         <option value="1">St</option>
                         <option value="2">Pn</option>
@@ -51,7 +49,7 @@
                 </div>
                 <div class="row" style="margin:0;align-items:center">
                     <button class="sm-btn" onclick="$('vl').value=1;upV()">R</button>
-                    <input type="range" id="vl" min="0" max="2" step="0.1" value="1" style="flex:1;height:24px" oninput="upV()">
+                    <input type="range" id="vl" min="0" max="2" step="0.1" value="1" style="flex:1;height:24px" oninput="upV();svSt()">
                 </div>
             </div>
         </div>
@@ -64,13 +62,16 @@
         <div class="stat-item" id="stWC">0 W</div>
     </div>
 
-    <textarea id="tx" class="card" placeholder="Content..." oninput="upWC()"></textarea>
+    <textarea id="tx" class="card" placeholder="Content..." oninput="upWC();svSt()"></textarea>
+    <div id="mkT" style="display:none;flex:1;background:var(--p-bg);align-items:center;justify-content:center">
+        <div id="mkTr" class="tmr-big">00:00</div>
+    </div>
 
     <div class="card" style="margin-top:auto">
         <div class="row" style="justify-content:space-between;align-items:center">
             <div style="display:flex;gap:8px;align-items:center">
-                <label class="chk-row" style="display:flex;align-items:center;gap:2px;font-size:11px"><input type="checkbox" id="as" checked>Scroll</label>
-                <label class="chk-row" style="display:flex;align-items:center;gap:2px;font-size:11px"><input type="checkbox" id="bp" checked>Beep</label>
+                <label class="chk-row" style="display:flex;align-items:center;gap:2px;font-size:11px"><input type="checkbox" id="as" checked onchange="svSt()">Scroll</label>
+                <label class="chk-row" style="display:flex;align-items:center;gap:2px;font-size:11px"><input type="checkbox" id="bp" checked onchange="svSt()">Beep</label>
             </div>
             <span id="st" style="font-size:11px">Ready</span>
         </div>
@@ -81,7 +82,7 @@
             <div class="p-box" id="pb"><div class="p-fill" id="pf"></div></div>
             <span id="tm" style="font-family:monospace;margin-left:2px;white-space:nowrap;font-size:11px">0:00/0:00</span>
         </div>
-        <div class="row" style="justify-content:center;gap:6px">
+        <div class="row" style="justify-content:center;gap:6px" id="skC">
             <button onclick="stepTrk(-1)" style="width:40px">⏮</button>
             <button onclick="sk(-10)" style="width:40px;color:var(--ye)">-10</button>
             <button onclick="sk(-5)" style="width:40px;color:var(--ye)">-5</button>
@@ -117,12 +118,22 @@
 
 <div id="md" class="modal">
     <div class="modal-inner">
-        <div class="row"><select id="rg" style="width:100px"><option value="">All</option></select><input type="text" placeholder="Search..." oninput="renL()" id="libS" style="flex:1"><select id="srt" style="width:60px" onchange="renL()"><option value="on">O-N</option><option value="no">N-O</option><option value="az">A-Z</option></select><button onclick="openM()" class="cls-btn">✕</button></div>
+        <div class="row">
+            <select id="rg" style="width:100px"><option value="">All</option></select>
+            <input type="text" placeholder="Search..." oninput="renL()" id="libS" style="flex:1">
+            <select id="srt" style="width:60px" onchange="renL()"><option value="on">O-N</option><option value="no">N-O</option><option value="az">A-Z</option></select>
+            <button onclick="openM()" class="cls-btn">✕</button>
+        </div>
         <div class="row" style="justify-content:center;background:var(--inp-bg);padding:2px" id="mdC"></div>
         <div class="range-wrap">
-            <select id="preW" onchange="setP(this.value)" style="height:24px;font-size:10px"><option value="0-max">Any</option><option value="0-200">0-200</option><option value="200-500">200-500</option></select>
+            <select id="preW" onchange="setP(this.value)" style="height:24px;font-size:10px">
+                <option value="0-max">Any</option><option value="0-200">0-200</option><option value="200-500">200-500</option>
+            </select>
             <input type="number" id="wMin" value="0" style="width:35px;height:24px;font-size:10px" oninput="uSl('min',this.value)">
-            <div class="sl-con"><input type="range" id="slMi" min="0" max="1" value="0" oninput="uSl('min',this.value)"><input type="range" id="slMa" min="0" max="1" value="1" oninput="uSl('max',this.value)"></div>
+            <div class="sl-con">
+                <input type="range" id="slMi" min="0" max="1" value="0" oninput="uSl('min',this.value)">
+                <input type="range" id="slMa" min="0" max="1" value="1" oninput="uSl('max',this.value)">
+            </div>
             <input type="number" id="wMax" value="0" style="width:45px;height:24px;font-size:10px" oninput="uSl('max',this.value)">
         </div>
         <div id="tags" style="overflow-x:auto;white-space:nowrap;padding:1px 0"></div>
@@ -136,7 +147,11 @@
         <div style="padding:8px;overflow-y:auto">
             <div class="row"><label>Mode</label><select id="exMode" style="flex:1"><option value="prac">Practice (Unlocked)</option><option value="mock">Mock (Locked)</option></select></div>
             <div class="row"><label>Preset</label><select id="exP" onchange="ldEx(this.value)"><option value="def">Default</option><option value="ssc_c_eng">SSC C (Eng)</option><option value="ssc_c_hin">SSC C (Hin)</option><option value="ssc_d_eng">SSC D (Eng)</option><option value="ssc_d_hin">SSC D (Hin)</option><option value="hc">High Court</option><option value="cus">Custom</option></select></div>
-            <div class="row"><div style="flex:1"><label class="lbl">Time (m)</label><input type="number" id="exT" value="10"></div><div style="flex:1"><label class="lbl">WPM</label><input type="number" id="exW" value="80"></div></div>
+            <div class="row">
+                <div style="flex:1"><label class="lbl">Time (m)</label><input type="number" id="exT" value="10"></div>
+                <div style="flex:1"><label class="lbl">WPM</label><input type="number" id="exW" value="80"></div>
+                <div style="flex:1"><label class="lbl">Max Marks</label><input type="number" id="exMM" value="100"></div>
+            </div>
             <div style="margin-top:8px;font-weight:bold;font-size:11px">Error Weights</div>
             <div id="exC" class="err-grid"></div>
         </div>
@@ -146,17 +161,21 @@
 
 <div id="trM" class="modal">
     <div class="modal-inner" style="height:90%;margin-top:auto;margin-bottom:auto">
+        <div class="row" style="background:var(--inp-bg);padding:4px;border-bottom:1px solid var(--bd);justify-content:center"><b id="trTi">Transcription</b></div>
         <div class="row" style="background:var(--inp-bg);padding:2px;border-bottom:1px solid var(--bd);justify-content:space-between">
             <div style="display:flex;align-items:center;gap:4px;flex:1">
                 <select id="tmD" onchange="sTm(this.value)" style="width:70px"><option value="0">∞</option><option value="1">1m</option><option value="2">2m</option><option value="5">5m</option><option value="10">10m</option><option value="15">15m</option><option value="30">30m</option><option value="-1">Cus</option></select>
-                <input id="tmC" type="number" style="width:40px;display:none" onblur="sTm(this.value)"><span id="tmR" style="font-family:monospace;font-weight:bold;margin-left:4px" class="tm-gr">00:00</span>
+                <input id="tmC" type="number" style="width:40px;display:none" onblur="sTm(this.value)">
+                <span id="tmR" style="font-family:monospace;font-weight:bold;margin-left:4px" class="tm-gr">00:00</span>
             </div>
             <div id="trC" class="ctrl-grp"></div>
             <button onclick="$('trM').classList.remove('active')" class="cls-btn">✕</button>
         </div>
         <div id="trV" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
             <textarea id="trI" placeholder="Type here..." style="margin:4px 0;border:none;flex:1;font-size:var(--ts);max-height:60vh" oninput="stTmr()"></textarea>
-            <div class="row" style="background:var(--inp-bg);padding:4px;border-top:1px solid var(--bd);align-items:center"><button onclick="check()" style="flex:1;border-color:var(--gr);height:36px;font-weight:bold">Check / Submit</button></div>
+            <div class="row" style="background:var(--inp-bg);padding:4px;border-top:1px solid var(--bd);align-items:center">
+                <button onclick="check()" style="flex:1;border-color:var(--gr);height:36px;font-weight:bold">Check / Submit</button>
+            </div>
         </div>
         <div id="rsV" style="display:none;flex-direction:column;flex:1;overflow:hidden">
             <div id="resBox"><div id="resDet" class="stats"></div></div>
@@ -167,13 +186,15 @@
     </div>
 </div>
 
-<script src="js/audio-config.js"></script>
-<script src="js/exam-config.js"></script>
-<script src="js/processor.js"></script>
-<script src="js/audio-engine.js"></script>
-<script src="js/mock-engine.js"></script>
-<script src="js/checker.js"></script>
-<script src="js/result.js"></script>
-<script src="js/ui-controller.js"></script>
+<div id="msgM" class="modal" style="z-index:200"><div class="modal-inner" style="height:auto;max-width:300px;text-align:center;padding:10px"><div id="msgT" style="margin-bottom:10px;font-weight:bold"></div><div class="row" id="msgB" style="justify-content:center"></div></div></div>
+
+<script src="/js/processor.js"></script>
+<script src="/js/audio-config.js"></script>
+<script src="/js/audio-engine.js"></script>
+<script src="/js/checker.js"></script>
+<script src="/js/exam-config.js"></script>
+<script src="/js/mock-engine.js"></script>
+<script src="/js/result.js"></script>
+<script src="/js/ui-controller.js"></script>
 </body>
 </html>
