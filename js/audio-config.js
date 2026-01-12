@@ -1,4 +1,18 @@
-function svSt(){const s={tx:$('tx').value,vl:$('vl').value,wi:$('wi').value,ri:$('ri').value,wcM:$('wcM').value,as:$('as').checked,bp:$('bp').checked,tm:document.body.classList.contains('light-mode'),curI};localStorage.setItem('st',JSON.stringify(s))}
-function ldSt(){try{const s=JSON.parse(localStorage.getItem('st')),h=JSON.parse(localStorage.getItem('hist'));if(h)hist=h;if(s){$('tx').value=s.tx||'';$('vl').value=s.vl||1;$('wi').value=s.wi||'80';$('ri').value=s.ri||'1.0000';$('wcM').value=s.wcM||'0';$('as').checked=!!s.as;$('bp').checked=!!s.bp;curI=s.curI??-1;if(s.tm)document.body.classList.add('light-mode');document.querySelectorAll('.th-chk').forEach(x=>x.checked=!!s.tm)}}catch(e){}}
-function upWC(f=false){const t=$('tx').value.trim(),m=$('wcM').value;let w=0;if(m==0)w=t?t.split(/\s+/).length:0;else if(m==1)w=Math.ceil(t.length/5);else{const p=t.replace(/([।?.,!@#;()"'\[\]{}-])/g,' $1 ').split(/\s+/).filter(x=>x);p.forEach(x=>{if(x.match(/^[,\u0964;]$/))w+=0.5;else if(x.match(/^[.?!।!]$/))w+=1;else if(!x.match(/^[।?.,!@#;()"'\[\]{}-]$/))w+=1})}$('wc').value=w;updateStatus()}
-function updateStatus(){$('stWPM').textContent=($('wi').value||0)+' WPM';$('stRate').textContent=($('ri').value||1.0)+'x';$('stWC').textContent=($('wc').value||0)+' W'}
+function upV(){if(gn)gn.gain.value=$('vl').value*0.5}
+function sk(s){if(exMd==='mock')return;au.currentTime+=s*(parseFloat($('ri').value)||1)}
+function dS(k,v){if(!v)return;if(k==='w')$('wi').value=v;else $('ri').value=v}
+function adW(d){$('wi').value=(parseFloat($('wi').value||0)+d).toFixed(2);sync('w')}
+function adR(d){$('ri').value=(parseFloat($('ri').value||1)+d).toFixed(4);sync('r')}
+
+function sync(s){
+    if(exMd==='mock'&&fixW>0)return;
+    const w=parseFloat($('wc').value),m=au.duration/60;
+    if(!m||!w)return;
+    if(s==='w'){$('ri').value=(parseFloat($('wi').value)/(w/m)).toFixed(4);au.playbackRate=Math.max(0.1,parseFloat($('ri').value))}
+    else{const wpm=((w/m)*parseFloat($('ri').value));$('wi').value=wpm.toFixed(2);au.playbackRate=Math.max(0.1,parseFloat($('ri').value))}
+    const sel=$('ws'),val=$('wi').value,opts=Array.from(sel.options).map(o=>o.value);
+    if(!opts.includes(val)){let o=document.createElement('option');o.value=val;o.text=Math.round(val);sel.add(o);sel.value=val}
+    const rSel=$('rs'),rVal=$('ri').value,rOpts=Array.from(rSel.options).map(o=>o.value);
+    if(!rOpts.includes(rVal)){let o=document.createElement('option');o.value=rVal;o.text=rVal;rSel.add(o);rSel.value=rVal}
+    updateStatus();svSt()
+}
