@@ -1,6 +1,27 @@
 function check(){
-    if(tmr)clearInterval(tmr);const src=$('tx').value,typ=$('trI').value;let S=splitT(src),T=splitT(typ),n=S.length,m=T.length,dp=Array.from({length:n+1},()=>Array(m+1).fill(0));for(let i=1;i<=n;i++)dp[i][0]=dp[i-1][0]-400;for(let j=1;j<=m;j++)dp[0][j]=dp[0][j-1]-400;
-    for(let i=1;i<=n;i++)for(let j=1;j<=m;j++){let sc=(S[i-1].t!==T[j-1].t)?-5000:(eq(S[i-1].v,T[j-1].v)?1000:(S[i-1].t==='w'?Math.max(-100,200-lv(S[i-1].v,T[j-1].v)*50):-100));dp[i][j]=Math.max(dp[i-1][j-1]+sc,dp[i-1][j]-400,dp[i][j-1]-400)}
-    let i=n,j=m;rDs=[];while(i>0||j>0){if(i>0&&j>0&&eq(S[i-1].v,T[j-1].v)){rDs.unshift({k:1,v:T[j-1].v,sv:S[i-1].v,t:T[j-1].t});i--;j--}else if(i>1&&j>0&&eq(S[i-2].v+S[i-1].v,T[j-1].v)){rDs.unshift({k:4,v:T[j-1].v,sv:S[i-2].v,sv2:S[i-1].v,t:'w'});i-=2;j--}else if(j>1&&i>0&&eq(T[j-2].v+T[j-1].v,S[i-1].v)){rDs.unshift({k:4,v:T[j-2].v,v2:T[j-1].v,sv:S[i-1].v,t:'w'});i--;j-=2}else if(i>0&&j>0&&i<n&&j<m&&eq(S[i].v,T[j-1].v)&&eq(S[i-1].v,T[j].v)){rDs.unshift({k:5,v:T[j-1].v,sv:S[i-1].v,t:'w'});rDs.unshift({k:5,v:T[j].v,sv:S[i].v,t:'w'});i-=2;j-=2}else if(i>0&&j>0&&S[i-1].t===T[j-1].t&&S[i-1].t==='w'&&dp[i][j]===dp[i-1][j-1]+(200-lv(S[i-1].v,T[j-1].v)*50)){rDs.unshift({k:3,v:T[j-1].v,sv:S[i-1].v,t:T[j-1].t});i--;j--}else if(j>0&&(i===0||dp[i][j]===dp[i][j-1]-400)){rDs.unshift({k:2,v:T[j-1].v,sv:'',t:T[j-1].t});j--}else{rDs.unshift({k:0,v:'',sv:S[i-1].v,t:S[i-1].t});i--}}
-    let sP=0,tP=0;rDs.forEach((r,idx)=>{if(r.sv){let fi=src.indexOf(r.sv,sP);if(fi!==-1){if(/\s/.test(src.substring(sP,fi))&&idx>0)rDs[idx-1].sSp=true;sP=fi+r.sv.length}if(r.sv2){let fi2=src.indexOf(r.sv2,sP);if(fi2!==-1){if(/\s/.test(src.substring(sP,fi2)))r.sSp1=true;sP=fi2+r.sv2.length}}}if(r.v){let fi=typ.indexOf(r.v,tP);if(fi!==-1){if(/\s/.test(typ.substring(tP,fi))&&idx>0)rDs[idx-1].tSp=true;tP=fi+r.v.length}if(r.v2){let fi2=typ.indexOf(r.v2,tP);if(fi2!==-1){if(/\s/.test(typ.substring(tP,fi2)))r.tSp1=true;tP=fi2+r.v2.length}}}});uD();$('trV').style.display='none';$('rsV').style.display='flex';svSt()
+    if(tmr)clearInterval(tmr);
+    const src=$('tx').value,typ=$('trI').value;
+    let S=splitT(src),T=splitT(typ),n=S.length,m=T.length,dp=Array.from({length:n+1},()=>Array(m+1).fill(0));
+    for(let i=1;i<=n;i++)dp[i][0]=dp[i-1][0]-400;for(let j=1;j<=m;j++)dp[0][j]=dp[0][j-1]-400;
+    for(let i=1;i<=n;i++)for(let j=1;j<=m;j++){
+        let sc=(S[i-1].t!==T[j-1].t)?-5000:(eq(S[i-1].v,T[j-1].v)?1000:(S[i-1].t==='w'?Math.max(-100,200-lv(S[i-1].v,T[j-1].v)*50):-100));
+        dp[i][j]=Math.max(dp[i-1][j-1]+sc,dp[i-1][j]-400,dp[i][j-1]-400);
+    }
+    let i=n,j=m;rDs=[];
+    while(i>0||j>0){
+        if(i>0&&j>0&&eq(S[i-1].v,T[j-1].v)){rDs.unshift({k:1,v:T[j-1].v,sv:S[i-1].v,t:T[j-1].t});i--;j--}
+        else if(i>1&&j>0&&eq(S[i-2].v+S[i-1].v,T[j-1].v)){rDs.unshift({k:4,v:T[j-1].v,sv:S[i-2].v,sv2:S[i-1].v,t:'w'});i-=2;j--}
+        else if(j>1&&i>0&&eq(T[j-2].v+T[j-1].v,S[i-1].v)){rDs.unshift({k:4,v:T[j-2].v,v2:T[j-1].v,sv:S[i-1].v,t:'w'});i--;j-=2}
+        else if(i>0&&j>0&&i<n&&j<m&&eq(S[i].v,T[j-1].v)&&eq(S[i-1].v,T[j].v)){rDs.unshift({k:5,v:T[j-1].v,sv:S[i-1].v,t:'w'});rDs.unshift({k:5,v:T[j].v,sv:S[i].v,t:'w'});i-=2;j-=2}
+        else if(i>0&&j>0&&S[i-1].t===T[j-1].t&&S[i-1].t==='w'&&dp[i][j]===dp[i-1][j-1]+(200-lv(S[i-1].v,T[j-1].v)*50)){rDs.unshift({k:3,v:T[j-1].v,sv:S[i-1].v,t:T[j-1].t});i--;j--}
+        else if(j>0&&(i===0||dp[i][j]===dp[i][j-1]-400)){rDs.unshift({k:2,v:T[j-1].v,sv:'',t:T[j-1].t});j--}
+        else{rDs.unshift({k:0,v:'',sv:S[i-1].v,t:S[i-1].t});i--}
+    }
+    let sP=0,tP=0;rDs.forEach((r,idx)=>{
+        if(r.sv){let fi=src.indexOf(r.sv,sP);if(fi!==-1){if(/\s/.test(src.substring(sP,fi))&&idx>0)rDs[idx-1].sSp=true;sP=fi+r.sv.length}
+        if(r.sv2){let fi2=src.indexOf(r.sv2,sP);if(fi2!==-1){if(/\s/.test(src.substring(sP,fi2)))r.sSp1=true;sP=fi2+r.sv2.length}}}
+        if(r.v){let fi=typ.indexOf(r.v,tP);if(fi!==-1){if(/\s/.test(typ.substring(tP,fi))&&idx>0)rDs[idx-1].tSp=true;tP=fi+r.v.length}
+        if(r.v2){let fi2=typ.indexOf(r.v2,tP);if(fi2!==-1){if(/\s/.test(typ.substring(tP,fi2)))r.tSp1=true;tP=fi2+r.v2.length}}}
+    });
+    uD();$('trV').style.display='none';$('rsV').style.display='flex';svSt();
 }
