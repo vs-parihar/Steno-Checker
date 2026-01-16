@@ -60,4 +60,5 @@ body.mk-on .card:first-child button:not(#exB), body.mk-on #f {pointer-events:non
 .dd-item{padding:6px;font-size:11px;cursor:pointer;border-bottom:1px solid var(--bd)}.dd-item:hover{background:var(--inp-bg)}
 #mkSts{font-size:14px;color:var(--ye);text-align:center;margin-bottom:10px;font-weight:bold}
 #mkSkp{display:none;margin-top:10px;border-color:var(--sk);width:100%}
+.ld-ov{position:absolute;inset:0;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:50;font-weight:bold;color:var(--in)}
 @media(max-width:600px){#app,.modal-inner{max-width:100%;width:100%}body{padding:0}}
