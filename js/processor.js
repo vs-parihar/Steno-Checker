@@ -1,11 +1,9 @@
-let ac,sr,gn,is=0,curL=[],filtL=[],curI=-1,bpAb=null,curO={},curS=1,curT=14,maxW=0,isN=0,rDs=[],errs=[],tmr,tS,tLim=0,tEl=0,fixW=0,exMd='prac',started=0,hist={},played80=0,exNext=false,mkSt=0,mkPh=0,mkDur=0,svT,lastAuSrc=null;
-const $=(i)=>document.getElementById(i);
-const au=()=>$('au'); // Functional to ensure it's loaded
-const regs=[{u:"d82c26e4cb069d8f5b9d1f2a5cf42e24",t:"Eng"},{u:"363e6ce7f8e1b41be69bba7623c7c320",t:"Hin"}];
-const ets=["Spelling","Missing","Substitution","Insertion","Pluralisation","Split/Join","Major Punctuation","Comma","Minor Punctuation","Word Joining Punctuation","Capitalisation","Ya+Shruti","Para","Transposition","Extra/Missing Space","Repetition"];
-
-const nz=s=>s.replace(/[\u0902\u0901]/g,'ŋ').replace(/[\u092e\u0928]\u094d/g,'ŋ').replace(/\u090f/g,'\u092f\u0947').replace(/\u0907/g,'\u092f\u093f').replace(/\u093e\u090f/g,'\u093e\u092f\u0947').replace(/\u093e\u0907/g,'\u093e\u092f\u093f');
+const nm=s=>s.replace(/[०-९]/g,d=>d.charCodeAt(0)-2406).replace(/[\u095c\u095d]/g,c=>c=='\u095c'?'\u0921\u093c':'\u0922\u093c').replace(/[\u0902\u0901]/g,'\u0902').normalize("NFC");
+const nz=s=>nm(s).replace(/[\u0902\u0901]/g,'ŋ').replace(/[\u092e\u0928]\u094d/g,'ŋ').replace(/\u090f/g,'\u092f\u0947').replace(/\u0907/g,'\u092f\u093f').replace(/\u093e\u090f/g,'\u093e\u092f\u0947').replace(/\u093e\u0907/g,'\u093e\u092f\u093f');
 const cln=s=>s.replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/I've/g,"I have").replace(/don't/g,"do not").replace(/can't/g,"cannot").replace(/it's/g,"it is");
-const splitT=t=>cln(t).replace(/([\.?!,;:\-\(\)\[\]"'।])/g,' $1 ').split(/\s+/).filter(x=>x).map(v=>({v,t:v.match(/^[\.?!,;:\-\(\)\[\]"'।]+$/)?'p':'w'}));
+const splitT=t=>cln(t).replace(/([\d०-९])[\.\?]([\d०-९])/g,'$1_D_$2').replace(/([\.?!,;:\-\(\)\[\]"'।])/g,' $1 ').replace(/_D_/g,'.').split(/\s+/).filter(x=>x).map(v=>({v,t:v.match(/^[\.?!,;:\-\(\)\[\]"'।]+$/)?'p':'w'}));
 const lv=(a,b)=>{let d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=a[i-1]===b[j-1]?d[i-1][j-1]:Math.min(d[i-1][j],d[i][j-1],d[i-1][j-1])+1;return d[a.length][b.length]};
 const eq=(a,b)=>nz(a)===nz(b);
+const cNum=s=>s.match(/^[\d,]+$/)?s.replace(/,/g,''):s;
+const wSc=s=>Array.from(s).reduce((a,c)=>a+(c.match(/[क-हक़-ड़]/)?2:(c.match(/[अ-औा-ौ]/)?1.5:0.5)),0)||1;
+const wLv=(s,t)=>{let d=Array.from({length:s.length+1},(_,i)=>Array(t.length+1).fill(0));for(let i=1;i<=s.length;i++)d[i][0]=d[i-1][0]+wSc(s[i-1]);for(let j=1;j<=t.length;j++)d[0][j]=d[0][j-1]+wSc(t[j-1]);for(let i=1;i<=s.length;i++)for(let j=1;j<=t.length;j++){let c=s[i-1]===t[j-1]?0:Math.max(wSc(s[i-1]),wSc(t[j-1]));d[i][j]=Math.min(d[i-1][j]+wSc(s[i-1]),d[i][j-1]+wSc(t[j-1]),d[i-1][j-1]+c)}return d[s.length][t.length]};
