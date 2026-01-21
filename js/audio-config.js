@@ -1,2 +1,5 @@
-const regs=[{u:"d82c26e4cb069d8f5b9d1f2a5cf42e24",t:"Eng"},{u:"363e6ce7f8e1b41be69bba7623c7c320",t:"Hin"}];
-const ets=["Spelling","Missing","Substitution","Insertion","Pluralisation","Split/Join","Major Punctuation","Comma","Minor Punctuation","Word Joining Punctuation","Capitalisation","Ya+Shruti","Para","Transposition","Extra/Missing Space","Repetition","Panchamakshar"];
+let ac,sr,gn,is=0,curL=[],filtL=[],curI=-1,bpAb=null,curO={},curS=1,curT=14,maxW=0,isN=0,rDs=[],errs=[],tmr,tS,tLim=0,tEl=0,fixW=0,exMd='prac',started=0,hist={},played80=0,exNext=false,mkSt=0,mkPh=0,mkDur=0,svT,lastAuSrc=null;
+const $=(i)=>document.getElementById(i),au=$('au'),regs=[{u:"d82c26e4cb069d8f5b9d1f2a5cf42e24",t:"Eng",n:"English"},{u:"363e6ce7f8e1b41be69bba7623c7c320",t:"Hin",n:"Hindi"}];
+const EM={SP:"Spelling",MI:"Missing",SB:"Substitution",IN:"Insertion",PL:"Pluralisation",SJ:"Split/Join",MP:"Major Punctuation",CM:"Comma",mn:"Minor Punctuation",wj:"Word Joining Punctuation",CP:"Capitalisation",YS:"Ya+Shruti",PR:"Para",TR:"Transposition",ES:"Extra/Missing Space",RP:"Repetition",PN:"Panchamakshar"};
+const rEM=Object.fromEntries(Object.values(EM).map((v,i)=> [v,Object.keys(EM)[i]]));
+const ePre={def:{t:10,r:5,w:80,e:{}},ssc_c_eng:{t:10,r:5,w:100,e:{MP:"H",CM:"H",CP:"H"}},ssc_c_hin:{t:10,r:5,w:100,e:{MP:"F",CM:"F"}},ssc_d_eng:{t:10,r:5,w:80,e:{MP:"H"}},ssc_d_hin:{t:10,r:5,w:80,e:{}},hc:{t:40,r:10,w:120,e:{}},cus:{t:10,r:5,w:80,e:{}}};

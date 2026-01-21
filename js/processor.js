@@ -1,5 +1,3 @@
-let ac,sr,gn,is=0,curL=[],filtL=[],curI=-1,bpAb=null,curO={},curS=1,curT=14,maxW=0,isN=0,rDs=[],errs=[],tmr,tS,tLim=0,tEl=0,fixW=0,exMd='prac',started=0,hist={},played80=0,exNext=false,mkSt=0,mkPh=0,mkDur=0,svT,lastAuSrc=null;
-const $=(i)=>document.getElementById(i);
 const nm=s=>s.replace(/[०-९]/g,d=>d.charCodeAt(0)-2406).replace(/[\u095c\u095d]/g,c=>c=='\u095c'?'\u0921\u093c':'\u0922\u093c').replace(/\u093c/g,'').normalize("NFC");
 const nz=s=>nm(s).replace(/[\u0902\u0901]/g,'ŋ').replace(/[\u092e\u0928]\u094d/g,'ŋ').replace(/\u090f/g,'\u092f\u0947').replace(/\u0907/g,'\u092f\u093f').replace(/\u093e\u090f/g,'\u093e\u092f\u0947').replace(/\u093e\u0907/g,'\u093e\u092f\u093f');
 const ny=s=>nm(s).replace(/ये/g,'ए').replace(/यी/g,'ई').replace(/यें/g,'एं').replace(/ए/g,'ये').replace(/ई/g,'यी').replace(/एं/g,'यें');
@@ -9,5 +7,7 @@ const splitT=t=>cln(t).replace(/([\d०-९]+)([\.\?])([\d०-९]+)/g,(m,a,s,b)
 const wSc=s=>Array.from(s).reduce((a,c)=>a+((c.match(/[\u0915-\u0939\u0958-\u095F]/))?2:1),0)||1;
 const wLv=(s,t)=>{let n=s.length,m=t.length,d=Array.from({length:n+1},()=>Array(m+1).fill(0));for(let i=1;i<=n;i++)d[i][0]=d[i-1][0]+((s[i-1].match(/[\u0915-\u0939\u0958-\u095F]/))?2:1);for(let j=1;j<=m;j++)d[0][j]=d[0][j-1]+((t[j-1].match(/[\u0915-\u0939\u0958-\u095F]/))?2:1);for(let i=1;i<=n;i++)for(let j=1;j<=m;j++)d[i][j]=Math.min(d[i-1][j]+((s[i-1].match(/[\u0915-\u0939\u0958-\u095F]/))?2:1),d[i][j-1]+((t[j-1].match(/[\u0915-\u0939\u0958-\u095F]/))?2:1),d[i-1][j-1]+(s[i-1]===t[j-1]?0:Math.max((s[i-1].match(/[\u0915-\u0939\u0958-\u095F]/))?2:1,(t[j-1].match(/[\u0915-\u0939\u0958-\u095F]/))?2:1)));return d[n][m]};
 const lv=(a,b)=>{let d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=a[i-1]===b[j-1]?d[i-1][j-1]:Math.min(d[i-1][j],d[i][j-1],d[i-1][j-1])+1;return d[a.length][b.length]};
+const getChD=(s,t)=>{const m=s.length,n=t.length,d=Array.from({length:m+1},()=>Array(n+1).fill(0));for(let i=0;i<=m;i++)d[i][0]=i;for(let j=0;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(s[i-1]===t[j-1]?0:1));let i=m,j=n,ops=[];while(i>0||j>0){if(i>0&&j>0&&s[i-1]===t[j-1]){i--;j--}else if(i>0&&j>0&&d[i][j]===d[i-1][j-1]+1){ops.push(`SP:${t[j-1]} instead ${s[i-1]}`);i--;j--}else if(j>0&&d[i][j]===d[i][j-1]+1){ops.push(`SP:+${t[j-1]}`);j--}else{ops.push(`SP:-${s[i-1]}`);i--}}return ops.reverse()}
 const eq=(a,b)=>nz(a)===nz(b);
 const cNum=s=>s.match(/^[\d,]+$/)?s.replace(/,/g,''):s;
+function fT(s){const m=Math.floor(s/60),x=Math.floor(s%60);return`${m}:${x<10?'0':''}${x}`}
