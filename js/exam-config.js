@@ -1,4 +1,4 @@
-function ldEx(v){const p=ePre[v]||ePre.def;$('exT').value=p.t;$('exRT').value=p.r;$('exW').value=p.w;Object.keys(EM).forEach(k=>{$(`c-${k}`).value=p.e[k]||(EM[k].includes('Space')||EM[k].includes('Punc')?'X':'S')})}
+function ldEx(v){if(v==='cus')return;const p=ePre[v]||ePre.def;$('exT').value=p.t;$('exRT').value=p.r;$('exW').value=p.w;Object.keys(EM).forEach(k=>{$(`c-${k}`).value=p.e[k]||(EM[k].includes('Space')||EM[k].includes('Punc')?'X':'S')})}
 function svEx(t){tLim=parseInt($('exT').value);sTm(tLim);fixW=parseInt($('exW').value);exMd=$('exMode').value;
 const exP=$('exP');if(exP.value!=='cus'&&$('exMode').value==='mock'){let cP=ePre.cus;cP.t=$('exT').value;cP.r=$('exRT').value;cP.w=$('exW').value;Object.keys(EM).forEach(k=>cP.e[k]=$(`c-${k}`).value);exP.value='cus'}
 $('exM').classList.remove('active');exNext=false;if(t==='off'){$('f').click();exNext=true}else if(t==='lnk'){opLnk();exNext=true}else if(t==='lib'){openM();exNext=true}else stEx()}
