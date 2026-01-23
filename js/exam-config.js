@@ -1,4 +1,6 @@
-function ldEx(v){if(v==='cus')return;const p=ePre[v]||ePre.def;$('exT').value=p.t;$('exRT').value=p.r;$('exW').value=p.w;Object.keys(EM).forEach(k=>{$(`c-${k}`).value=p.e[k]||(EM[k].includes('Space')||EM[k].includes('Punc')?'X':'S')})}
+const ePre={def:{n:"Default",t:10,r:5,w:80,e:{SP:"S",MI:"S",SB:"S",IN:"S",PL:"S",SJ:"S",MP:"S",CM:"S",mn:"S",wj:"S",CP:"S",YS:"S",PR:"S",TR:"S",ES:"S",RP:"S",PN:"S"}},ssc_c_eng:{n:"SSC C (Eng)",t:10,r:5,w:100,e:{MP:"H",CM:"H",CP:"H"}},ssc_c_hin:{n:"SSC C (Hin)",t:10,r:5,w:100,e:{MP:"D",CM:"D"}},ssc_d_eng:{n:"SSC D (Eng)",t:10,r:5,w:80,e:{MP:"H"}},ssc_d_hin:{n:"SSC D (Hin)",t:10,r:5,w:80,e:{}},hc:{n:"High Court",t:40,r:10,w:120,e:{}},cus:{n:"Custom",t:10,r:5,w:80,e:{}}};
+function ldEx(v){const p=ePre[v]||ePre.def;$('exT').value=p.t;$('exRT').value=p.r;$('exW').value=p.w;
+Object.keys(EM).forEach(k=>{let d='S';if(EM[k].includes('Space')||EM[k].includes('Punc'))d='X';$(`c-${k}`).value=p.e[k]||d})}
 function svEx(t){tLim=parseInt($('exT').value);sTm(tLim);fixW=parseInt($('exW').value);exMd=$('exMode').value;
 const exP=$('exP');if(exP.value!=='cus'&&$('exMode').value==='mock'){let cP=ePre.cus;cP.t=$('exT').value;cP.r=$('exRT').value;cP.w=$('exW').value;Object.keys(EM).forEach(k=>cP.e[k]=$(`c-${k}`).value);exP.value='cus'}
 $('exM').classList.remove('active');exNext=false;if(t==='off'){$('f').click();exNext=true}else if(t==='lnk'){opLnk();exNext=true}else if(t==='lib'){openM();exNext=true}else stEx()}
