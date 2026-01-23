@@ -62,3 +62,4 @@ body.mk-on .card:first-child button:not(#exB), body.mk-on #f, body.mk-on #libBtn
 #mkSkp{display:none;margin-top:10px;border-color:var(--sk);width:100%}
 .ld-ov{position:absolute;inset:0;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:50;font-weight:bold;color:var(--in)}
 @media(max-width:600px){#app,.modal-inner{max-width:100%;width:100%}body{padding:0}}
+.t-cor:empty{display:none}

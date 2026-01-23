@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>Steno Player</title><link rel="stylesheet" href="style.css"></head><body>
 <div id="app"><div class="card"><div class="tb-row">
 <div style="display:flex;gap:2px;position:relative"><button onclick="tDD()" style="padding:0 8px;font-size:10px">📂 Load ▼</button>
-<div id="ddF" class="dd-menu"><div class="dd-item" onclick="$('f').click();tDD()">Offline File</div><div class="dd-item" onclick="opLnk();tDD()">From URL</div><div class="dd-item" onclick="addReg()">Add Registry</div></div>
+<div id="ddF" class="dd-menu"><div class="dd-item" onclick="$('f').click();tDD()">Offline File</div><div class="dd-item" onclick="opLnk();tDD()">From URL</div><div class="dd-item" onclick="addReg()">Add Reg/Playlist</div></div>
 <button onclick="openM()" id="libBtn" style="padding:0 8px;font-size:10px">🌐 Matters</button>
 <button onclick="opTr()" id="trBtn" style="padding:0 8px;border-color:var(--sk);font-size:10px" disabled>⌨️ Transcribe</button><button onclick="$('exM').classList.add('active')" style="padding:0 8px;border-color:var(--ye);font-size:10px">📝 Exam</button></div>
 <div style="flex:1"></div><div style="display:flex;gap:2px"><button onclick="expA()" id="exB" style="width:24px;font-size:10px">⬇️</button></div></div><input type="file" id="f" hidden multiple>
