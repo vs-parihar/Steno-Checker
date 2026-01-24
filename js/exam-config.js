@@ -1,11 +1,11 @@
 const ePre={
-def:{n:"Default",t:10,r:5,w:80,e:{SP:"S",MI:"S",SB:"S",IN:"S",PL:"S",SJ:"S",MP:"S",CM:"S",mn:"S",wj:"S",CP:"S",YS:"S",PR:"S",TR:"S",ES:"S",RP:"S",PN:"S"}},
-ssc_c_eng:{n:"SSC C (Eng)",t:10,r:5,w:100,e:{MP:"H",CM:"H",CP:"H"}},
-ssc_c_hin:{n:"SSC C (Hin)",t:10,r:5,w:100,e:{MP:"D",CM:"D"}},
-ssc_d_eng:{n:"SSC D (Eng)",t:10,r:5,w:80,e:{MP:"H"}},
-ssc_d_hin:{n:"SSC D (Hin)",t:10,r:5,w:80,e:{}},
-hc:{n:"High Court",t:40,r:10,w:120,e:{}},
-cus:{n:"Custom",t:10,r:5,w:80,e:{}}
+def:{n:"Default",t:10,r:5,w:80,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}},
+ssc_c_eng:{n:"SSC C (Eng)",t:10,r:5,w:100,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}},
+ssc_c_hin:{n:"SSC C (Hin)",t:10,r:5,w:100,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}},
+ssc_d_eng:{n:"SSC D (Eng)",t:10,r:5,w:80,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}},
+ssc_d_hin:{n:"SSC D (Hin)",t:10,r:5,w:80,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}},
+hc:{n:"High Court",t:40,r:10,w:120,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}},
+cus:{n:"Custom",t:10,r:5,w:80,e:{SP:"H",MI:"S",SB:"S",IN:"S",PL:"H",SJ:"H",MP:"H",CM:"X",mn:"X",wj:"H",CP:"H",YS:"X",PR:"X",TR:"S",ES:"X",RP:"S",PN:"X"}}
 };
 function ldEx(v){const p=ePre[v]||ePre.def;$('exT').value=p.t;$('exRT').value=p.r;$('exW').value=p.w;
 Object.keys(EM).forEach(k=>{let d='S';if(EM[k].includes('Space')||EM[k].includes('Punc'))d='X';$(`c-${k}`).value=p.e[k]||d})}
